@@ -18,7 +18,7 @@ func main() {
 	e.Use(middleware.Logger())
 
 	e.Any("/*", func(c echo.Context) error {
-		return c.Json(c.JSON(http.StatusOK, Students { count: 250 }))
+		return c.JSON(http.StatusOK, Students { Count: 250 })
 	})
 
 	e.Logger.Fatal(e.Start(":" + port()))
