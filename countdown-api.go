@@ -22,7 +22,13 @@ func main() {
 	e.Use(middleware.Logger())
 
 	e.Any("/*", func(c echo.Context) error {
-		return c.JSON(http.StatusOK, Students{Count: studentsCount()})
+		count := studentsCount()
+
+		if count == -1 {
+			return c.String(http.StatusServiceUnavailable, "error fetching data")
+		}
+
+		return c.JSON(http.StatusOK, Students{Count: count})
 	})
 
 	e.Logger.Fatal(e.Start(":" + port()))
