@@ -22,9 +22,9 @@ func main() {
 	e.Use(middleware.Logger())
 
 	e.Any("/*", func(c echo.Context) error {
-		count := studentsCount()
+		count, err := studentsCount()
 
-		if count == -1 {
+		if err != nil {
 			return c.String(http.StatusServiceUnavailable, "error fetching data")
 		}
 
@@ -54,27 +54,27 @@ var httpClient = http.Client{
 
 var rgx = regexp.MustCompile(`Aktuálny počet podpisov: (\d+)`)
 
-func studentsCount() int {
+func studentsCount() (int, error) {
 	res, err := httpClient.Get("https://www.zanasufiit.sk/wp-json/wp/v2/posts/120")
 	if err != nil {
-		return -1
+		return -1, err
 	}
 
 	defer res.Body.Close()
 	if res.StatusCode != http.StatusOK {
-		return -1
+		return -1, err
 	}
 	bodyBytes, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		return -1
+		return -1, err
 	}
 	text := gjson.Get(string(bodyBytes), "excerpt.rendered")
 
 	rs := rgx.FindStringSubmatch(text.String())
 	count, err := strconv.Atoi(rs[1])
 	if err != nil {
-		return -1
+		return -1, err
 	}
 
-	return count
+	return count, nil
 }
