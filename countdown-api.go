@@ -20,6 +20,7 @@ type Students struct {
 func main() {
 	e := echo.New()
 	e.Use(middleware.Logger())
+	e.Use(middleware.CORS())
 
 	e.Any("/*", func(c echo.Context) error {
 		count, err := studentsCount()
