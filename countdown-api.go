@@ -61,7 +61,6 @@ func studentsCount() (int, error) {
 		return -1, err
 	}
 
-	defer res.Body.Close()
 	if res.StatusCode != http.StatusOK {
 		return -1, err
 	}
@@ -69,6 +68,12 @@ func studentsCount() (int, error) {
 	if err != nil {
 		return -1, err
 	}
+
+	err = res.Body.Close()
+	if err != nil {
+		return -1, err
+	}
+
 	text := gjson.Get(string(bodyBytes), "excerpt.rendered")
 
 	rs := rgx.FindStringSubmatch(text.String())
