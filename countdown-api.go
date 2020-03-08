@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/tidwall/gjson"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -56,7 +55,7 @@ var httpClient = http.Client{
 var rgx = regexp.MustCompile(`Aktuálny počet podpisov: (\d+)`)
 
 func studentsCount() (int, error) {
-	res, err := httpClient.Get("https://www.zanasufiit.sk/wp-json/wp/v2/posts/120")
+	res, err := httpClient.Get("https://m.facebook.com/zanasufiit/photos/a.106602740830388/133952468095415/")
 	if err != nil {
 		return -1, err
 	}
@@ -74,9 +73,7 @@ func studentsCount() (int, error) {
 		return -1, err
 	}
 
-	text := gjson.Get(string(bodyBytes), "excerpt.rendered")
-
-	rs := rgx.FindStringSubmatch(text.String())
+	rs := rgx.FindStringSubmatch(string(bodyBytes))
 	count, err := strconv.Atoi(rs[1])
 	if err != nil {
 		return -1, err
