@@ -55,7 +55,7 @@ var httpClient = http.Client{
 var rgx = regexp.MustCompile(`Aktuálny počet podpisov: (\d+)`)
 
 func studentsCount() (int, error) {
-	res, err := httpClient.Get("https://m.facebook.com/zanasufiit/photos/a.106602740830388/133952468095415/")
+	res, err := httpClient.Get("https://m.facebook.com/story.php?story_fbid=133952524762076&id=104098081080854")
 	if err != nil {
 		return -1, err
 	}
